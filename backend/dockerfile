@@ -1,14 +1,18 @@
 FROM php:7.4-apache
 # Imagem do dockerhub:tag de versão
+
 WORKDIR /var/www/html
 # O comando WORKDIR no Docker é usado para definir o diretório de trabalho atual 
 # para qualquer instrução RUN, CMD, ENTRYPOINT, COPY e ADD que segue no Dockerfile. 
 # Isso permite que você especifique a localização exata do aplicativo ou serviço 
 # que está construindo com o Docker.
+
 COPY index.php /var/www/html/
 # Copia index.php para o container.
+
 COPY conexao.php /var/www/html/
 # Copia conexao.php para o container.
+
 RUN apt-get update && apt-get install -y \
 # Executa o update do apt-get e apt-get install com -y para não perguntar.
         libfreetype6-dev \
@@ -17,15 +21,19 @@ RUN apt-get update && apt-get install -y \
         # JPEG lib para lidar com arquivos no formato JPEG.
         libpng-dev \
         # libpng para lidar com arquivos no formato PNG.
+        
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     # Configura a extensão gd para a imagem do docker PHP. 
     # Permite o uso dos formatos de imagem FreeType e JPEG na extensão gd.
+    
     && docker-php-ext-install -j$(nproc) gd \
     # Instala a extensão PHP GD. Esta extensão é usada para 
     # manipulação e processamento de imagens.
+    
     && docker-php-ext-install pdo_mysql \
     # Instala a extensão PHP PDO_MYSQL, que é usada para se conectar 
     # a um banco de dados MySQL a partir do PHP.
+    
     && docker-php-ext-install mysqli
     # Instala a extensão mysqli para PHP ao usar a imagem Docker PHP. 
     # A extensão mysqli permite o desenvolvimento de aplicativos que podem 
