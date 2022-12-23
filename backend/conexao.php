@@ -1,8 +1,10 @@
 <?php
-$servername = "";
+$servername = "mysql-connection";
 $username = "root";
 $password = "Senha123";
 $database = "meubanco";
+# este database precisa ser criado, pois ainda não existe.
+# crie uma pasta database e dentro dela crie um arquivo dockerfile
 
 // Criar conexão
 
