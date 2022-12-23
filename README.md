@@ -57,3 +57,6 @@ _Execute os comandos mysql para visualizar a tabela:_
 `select * FROM mensagens;`
  
     
+---
+
+Este desafio de projeto é parte do bootcamp da DIO Jornada DevOps com AWS - Impulso, ministrado por https://github.com/denilsonbonatti.
