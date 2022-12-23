@@ -1,22 +1,27 @@
 FROM mysql:5.7
 # Imagem do dockerhub:tag de versão
+
 WORKDIR /var/lib/mysql
 # O comando WORKDIR no Docker é usado para definir o diretório de trabalho atual 
 # para qualquer instrução RUN, CMD, ENTRYPOINT, COPY e ADD que segue no Dockerfile. 
 # Isso permite que você especifique a localização exata do aplicativo ou serviço 
 # que está construindo com o Docker.
+
 ENV MYSQL_ROOT_PASSWORD=Senha123
 # Define a senha raiz para o banco de dados MySQL ao executar um container Docker. 
 # Isso garantirá que apenas usuários autorizados possam acessar o banco de dados.
+
 ENV MYSQL_DATABASE=meubanco
 # Define a variável de ambiente MYSQL_DATABASE como meubanco. Essa variável 
 # de ambiente é usada para definir o nome do banco de dados padrão usado por um container MySQL.
 # Aqui nesse contexto o banco será referenciado no arquivo conexao.php na pasta backend.
+
 ADD sql.sql /docker-entrypoint-initbd.d
 # A sintaxe acima é usada para adicionar um arquivo de script SQL ao container 
 # que será executado quando o container for iniciado. 
 # Esse script pode ser usado para criar e preencher tabelas de banco de dados, 
 # configurar usuários e funções e executar outras tarefas de configuração necessárias para o aplicativo.
+
 EXPOSE 3306
 # Define as portas de rede para este container escutar no tempo de execução.
 # A porta 3306 é a porta padrão para o MySQL.
