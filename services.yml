@@ -1,0 +1,29 @@
+# Deploy do LoadBalancer 
+apiVersion: v1
+kind: Service
+metadata:
+  name: php
+spec:
+  selector:
+    app: php
+  ports:
+    - port: 80
+      targetPort: 80
+  type: LoadBalancer
+
+---
+# Deploy da conexão do MySQL
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-connection
+  # Este nome deve ser inserido na linha 2 do arquivo conexao.php, em $servername 
+  # entre as aspas, para que a aplicação php crie a conexão com o DB.
+  # Exemplo: $servername = "mysql-connection";
+  # Nesse contexto ele será o nosso servidor MySQL.
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
