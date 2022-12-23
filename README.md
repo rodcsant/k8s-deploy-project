@@ -1,5 +1,5 @@
 # k8s-deploy-project
-## Files for a cloud cluster deployment project using Kubernetes
+## Files for a cloud cluster deployment project using Kubernetes and GCP
 
 ### Passo-a-passo da execução do projeto:
 
