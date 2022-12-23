@@ -1,0 +1,92 @@
+# Arquivo de implantação da aplicação.
+# Começaremos pelo MySQL DB.
+# Por estarmos usando GCP, não será necessário criar um PV, apenas um PVC.
+apiVersion: v1
+kind: PersistentVolumeClaim
+# Tipo do deploy. 
+metadata:
+  name: mysql-dados
+  # Nome do PVC
+spec:
+# Especificação ou definição do arquivo, que inclui o formato dos dados no arquivo, 
+# a estrutura do arquivo, os tipos de dados armazenados no arquivo e qualquer 
+# outra informação necessária para entender o arquivo. 
+  accessModes:
+    - ReadWriteOnce
+  # Grava dados apenas em um Pod
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard-rwo
+  # storageClassName do GCP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  # Nome do Deploy
+spec: 
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: rodcsant/database-k8s-project:1.0
+        args:
+        - "--ignore-db-dir=lost+found"
+        # Argumento para ignorar erro caso o PersistentVolume remoto já contenha dados.
+        imagePullPolicy: Always
+        # Para baixar a imagem sempre que o deploy executar.
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+
+        volumeMounts:
+        - name: mysql-dados
+        # Nome do PersistentVolume
+          mountPath: /var/lib/mysql/
+      volumes:
+      - name: mysql-dados
+        persistentVolumeClaim:
+          claimName: mysql-dados
+
+---
+# Deploy do backend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+  labels:
+    app: php
+spec:
+  replicas: 6
+  selector:
+  # Os seletores são usados em arquivos YAML para identificar valores específicos no arquivo, 
+  # tornando mais fácil recuperá-los.
+    matchLabels:
+    # MatchLabels é um seletor usado em um arquivo YAML do Kubernetes para especificar 
+    # um conjunto de rótulos que devem ser todos verdadeiros para que um recurso seja selecionado. 
+    # Geralmente é usado para selecionar Pods ou outros recursos para um serviço ou implantação. 
+    # MatchLabels pode ser usado em combinação com outros seletores, como MatchExpressions, 
+    # para selecionar com mais precisão os recursos desejados.
+      app: php
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+      - name: php
+        image: rodcsant/backend-k8s-project:1.0
+        imagePullPolicy: Always
+        # Para baixar a imagem sempre que o deploy executar.
+        ports:
+        - containerPort: 80
+
+      
